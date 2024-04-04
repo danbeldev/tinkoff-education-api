@@ -59,7 +59,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.GET, "/course/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/handling-spring-static-resources/files/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/handling-spring-static-resources/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/files/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .anonymous(AbstractHttpConfigurer::disable)

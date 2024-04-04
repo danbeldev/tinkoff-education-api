@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.tinkoff.education.features.user.dto.JwtRequestDto;
 import ru.tinkoff.education.features.user.dto.JwtResponseDto;
 import ru.tinkoff.education.features.user.dto.RegistrationRequestDto;
+import ru.tinkoff.education.features.user.dto.UserDto;
 import ru.tinkoff.education.features.user.entitites.UserEntity;
+import ru.tinkoff.education.features.user.mappers.UserMapper;
 import ru.tinkoff.education.security.JwtEntity;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -16,6 +20,14 @@ import ru.tinkoff.education.security.JwtEntity;
 public class UserController {
 
     private final UserService userService;
+
+    private final UserMapper userMapper;
+
+    @GetMapping
+    @SecurityRequirement(name = "bearerAuth")
+    private List<UserDto> getAll() {
+        return userMapper.toDto(userService.getAll());
+    }
 
     @PostMapping("login")
     private JwtResponseDto login(@RequestBody JwtRequestDto dto) {

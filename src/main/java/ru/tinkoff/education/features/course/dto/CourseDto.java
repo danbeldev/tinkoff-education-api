@@ -4,5 +4,6 @@ public record CourseDto(
         Integer id,
         String title,
         String description,
-        Float price
+        Float price,
+        String backImageId
 ) {}

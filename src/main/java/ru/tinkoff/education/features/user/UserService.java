@@ -14,6 +14,8 @@ import ru.tinkoff.education.features.user.dto.RegistrationRequestDto;
 import ru.tinkoff.education.features.user.entitites.UserEntity;
 import ru.tinkoff.education.security.JwtTokenProvider;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,6 +28,11 @@ public class UserService {
     @Autowired
     @Lazy
     private JwtTokenProvider jwtTokenProvider;
+
+    @Transactional(readOnly = true)
+    public List<UserEntity> getAll() {
+        return userRepository.findAll();
+    }
 
     @Transactional(readOnly = true)
     public UserEntity getById(Integer id) {

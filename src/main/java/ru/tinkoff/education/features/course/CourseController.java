@@ -2,12 +2,11 @@ package ru.tinkoff.education.features.course;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.education.features.course.dto.CategoryDto;
-import ru.tinkoff.education.features.course.dto.CourseDetailsDto;
-import ru.tinkoff.education.features.course.dto.CourseDto;
-import ru.tinkoff.education.features.course.dto.CourseVideoDto;
+import org.springframework.web.multipart.MultipartFile;
+import ru.tinkoff.education.features.course.dto.*;
 import ru.tinkoff.education.features.course.mappers.CategoryMapper;
 import ru.tinkoff.education.features.course.mappers.CourseDetailsMapper;
 import ru.tinkoff.education.features.course.mappers.CourseMapper;
@@ -70,5 +69,29 @@ public class CourseController {
             @AuthenticationPrincipal JwtEntity jwt
     ) {
         return courseService.isSubscriber(jwt.getId(), id);
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @SecurityRequirement(name = "bearerAuth")
+    private CourseDetailsDto add(
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "price") Float price,
+            @RequestParam(name = "categoryId") Integer categoryId,
+            @RequestParam(name = "back_image") MultipartFile backImage
+    ) {
+        CreateCourseParams params = new CreateCourseParams(title, description, price, categoryId);
+        return courseDetailsMapper.toDto(courseService.add(params, backImage));
+    }
+
+    @PostMapping(value = "{id}/video", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @SecurityRequirement(name = "bearerAuth")
+    private CourseVideoDto addVideo(
+            @PathVariable Integer id,
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "video") MultipartFile video
+    ) {
+        return courseVideoMapper.toDto(courseService.addVideo(title, description, id, video));
     }
 }
