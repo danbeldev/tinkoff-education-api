@@ -1,10 +1,10 @@
 package ru.tinkoff.education.features.user.entitites;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import ru.tinkoff.education.features.course.entities.StudentCoursesSubscriberEntity;
+
+import java.util.Collection;
 
 @Data
 @Entity(name = "users")
@@ -21,6 +21,9 @@ public class UserEntity {
     private String password;
     private Float balance;
     private Role role;
+
+    @OneToMany(mappedBy = "id.user", fetch = FetchType.LAZY)
+    private Collection<StudentCoursesSubscriberEntity> subscriberCourses;
 
     public enum Role {
         STUDENT,

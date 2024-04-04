@@ -7,6 +7,7 @@ public record CourseDetailsDto(
         String title,
         String description,
         Float price,
+        String backImageId,
         CategoryDto category,
         Collection<CourseVideoDto> videos
 ) {}

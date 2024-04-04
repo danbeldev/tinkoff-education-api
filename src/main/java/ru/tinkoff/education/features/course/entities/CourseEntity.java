@@ -23,4 +23,7 @@ public class CourseEntity {
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Collection<CourseVideoEntity> videos;
+
+    @OneToMany(mappedBy = "id.course", fetch = FetchType.LAZY)
+    private Collection<StudentCoursesSubscriberEntity> subscriberCourses;
 }

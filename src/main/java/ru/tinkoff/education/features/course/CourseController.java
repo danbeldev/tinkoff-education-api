@@ -1,6 +1,8 @@
 package ru.tinkoff.education.features.course;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.tinkoff.education.features.course.dto.CategoryDto;
 import ru.tinkoff.education.features.course.dto.CourseDetailsDto;
@@ -10,6 +12,7 @@ import ru.tinkoff.education.features.course.mappers.CategoryMapper;
 import ru.tinkoff.education.features.course.mappers.CourseDetailsMapper;
 import ru.tinkoff.education.features.course.mappers.CourseMapper;
 import ru.tinkoff.education.features.course.mappers.CourseVideoMapper;
+import ru.tinkoff.education.security.JwtEntity;
 
 import java.util.List;
 
@@ -49,5 +52,23 @@ public class CourseController {
             @PathVariable Integer id
     ) {
         return courseVideoMapper.toDto(courseService.getVideos(id));
+    }
+
+    @PostMapping("{id}/subscriber")
+    @SecurityRequirement(name = "bearerAuth")
+    private void subscriber(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal JwtEntity jwt
+    ) {
+        courseService.subscriber(jwt.getId(), id);
+    }
+
+    @GetMapping("{id}/subscriber")
+    @SecurityRequirement(name = "bearerAuth")
+    private Boolean isSubscriber(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal JwtEntity jwt
+    ) {
+        return courseService.isSubscriber(jwt.getId(), id);
     }
 }
