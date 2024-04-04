@@ -1,14 +1,14 @@
 package ru.tinkoff.education.features.user;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import ru.tinkoff.education.features.user.dto.JwtRequestDto;
 import ru.tinkoff.education.features.user.dto.JwtResponseDto;
 import ru.tinkoff.education.features.user.dto.RegistrationRequestDto;
 import ru.tinkoff.education.features.user.entitites.UserEntity;
+import ru.tinkoff.education.security.JwtEntity;
 
 @RestController
 @RequestMapping("/user")
@@ -25,5 +25,21 @@ public class UserController {
     @PostMapping("student/reg")
     private JwtResponseDto reg(@RequestBody RegistrationRequestDto dto) {
         return userService.registration(dto, UserEntity.Role.STUDENT);
+    }
+
+    @GetMapping("balance")
+    @SecurityRequirement(name = "bearerAuth")
+    private Float getBalance(
+            @AuthenticationPrincipal JwtEntity jwt
+    ) {
+        return userService.getBalance(jwt.getId());
+    }
+
+    @PostMapping("plus-balance")
+    @SecurityRequirement(name = "bearerAuth")
+    private Float plusBalance(
+            @AuthenticationPrincipal JwtEntity jwt
+    ){
+        return userService.plusBalance(jwt.getId());
     }
 }

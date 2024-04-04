@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @Data
 @Entity(name = "courses")
@@ -17,7 +16,7 @@ public class CourseEntity {
     private String title;
     private String description;
     private Float price;
-    private UUID backImageId;
+    private String backImageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private CategoryEntity category;

@@ -28,6 +28,12 @@ public class UserService {
     private JwtTokenProvider jwtTokenProvider;
 
     @Transactional(readOnly = true)
+    public UserEntity getById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @Transactional(readOnly = true)
     public UserEntity getByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -73,10 +79,24 @@ public class UserService {
         return jwtResponse;
     }
 
+    @Transactional
     public UserEntity add(UserEntity user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if(userRepository.findByUsername(user.getUsername()).isPresent())
             throw new BadRequestException("Имя пользователя уже используеться");
         return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Float getBalance(Integer id) {
+        UserEntity user = getById(id);
+        return user.getBalance();
+    }
+
+    @Transactional
+    public Float plusBalance(Integer id) {
+        UserEntity user = getById(id);
+        user.setBalance(user.getBalance() + 1000);
+        return userRepository.save(user).getBalance();
     }
 }
