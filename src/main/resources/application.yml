@@ -1,0 +1,16 @@
+server:
+  port: 10035
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /tinkoff/education
+spring:
+  datasource:
+    url: jdbc:postgresql://danbel.ru:5432/tinkoff_education
+    username: postgres
+    password: danbelZzAa6190
+  web:
+    resources:
+      static-locations: classpath:/files/
+security:
+  jwt:
+    secret: c2Zqa3NkamZranNkbGtqZmtsc2pka2ZqdmJjeHZic2JkZmJzamtkZA==
